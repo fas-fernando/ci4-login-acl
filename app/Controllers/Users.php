@@ -45,7 +45,7 @@ class Users extends BaseController
                 'avatar'   => $user->avatar,
                 'username' => esc($user->username),
                 'email'    => esc($user->email),
-                'status'   => ($user->status === true ? 'Ativo' : 'Inativo' ),
+                'status'   => ($user->status == true ? '<span class="text-success">Ativo</span>' : '<span class="text-danger">Inativo</span>' ),
             ];
         }
 

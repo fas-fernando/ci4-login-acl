@@ -21,7 +21,7 @@ class UserFakerSeeder extends Seeder
                 'username' => $faker->unique()->name,
                 'email' => $faker->unique()->email,
                 'password_hash' => '123456',
-                'status' => 1,
+                'status' => $faker->numberBetween(0, 1),
             ]);
         }
 
