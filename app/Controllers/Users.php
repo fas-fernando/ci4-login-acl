@@ -25,8 +25,8 @@ class Users extends BaseController
 
     public function getUsers()
     {
-        // if(!$this->request->isAJAX())
-        //     return redirect()->back();
+        if(!$this->request->isAJAX())
+            return redirect()->back();
 
         $attr = [
             'id',
@@ -38,9 +38,21 @@ class Users extends BaseController
 
         $users = $this->userModel->select($attr)->findAll();
 
-        echo '<pre>';
-        print_r($users);
-        echo '</pre>';
-        exit;
+        $data = [];
+
+        foreach($users as $user) {
+            $data[] = [
+                'avatar'   => $user->avatar,
+                'username' => esc($user->username),
+                'email'    => esc($user->email),
+                'status'   => ($user->status === true ? 'Ativo' : 'Inativo' ),
+            ];
+        }
+
+        $returnData = [
+            'data' => $data,
+        ];
+
+        return $this->response->setJSON($returnData);
     }
 }
