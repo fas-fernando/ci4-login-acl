@@ -16,6 +16,10 @@ class Users extends BaseController
 
     public function index()
     {
-        $this->userModel->findAll();
+        $data = [
+            'title' => 'Lista de usuários',
+        ];
+
+        return view('Users/index', $data);
     }
 }
