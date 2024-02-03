@@ -45,7 +45,7 @@ class Users extends BaseController
                 'avatar'   => $user->avatar,
                 'username' => esc($user->username),
                 'email'    => esc($user->email),
-                'status'   => ($user->status == true ? '<span class="text-success">Ativo</span>' : '<span class="text-danger">Inativo</span>' ),
+                'status'   => ($user->status == true ? '<i class="text-success fa fa-unlock"></i> <span class="text-success">Ativo</span>' : '<i class="text-danger fa fa-lock"></i> <span class="text-danger">Inativo</span>' ),
             ];
         }
 
@@ -56,3 +56,6 @@ class Users extends BaseController
         return $this->response->setJSON($returnData);
     }
 }
+
+
+https://github.com/codeigniter4/translations
