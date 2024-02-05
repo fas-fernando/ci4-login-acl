@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use Exception;
 
 class Users extends BaseController
 {
@@ -41,9 +42,11 @@ class Users extends BaseController
         $data = [];
 
         foreach($users as $user) {
+            $username = esc($user->username);
+
             $data[] = [
                 'avatar'   => $user->avatar,
-                'username' => esc($user->username),
+                'username' => anchor("users/show/$user->id", $username, 'title="Exibir usuário ' . $username . '"'),
                 'email'    => esc($user->email),
                 'status'   => ($user->status == true ? '<i class="text-success fa fa-unlock"></i> <span class="text-success">Ativo</span>' : '<i class="text-danger fa fa-lock"></i> <span class="text-danger">Inativo</span>' ),
             ];
@@ -55,7 +58,29 @@ class Users extends BaseController
 
         return $this->response->setJSON($returnData);
     }
+
+    public function show(int $id = null)
+    {
+        $user = $this->getUserOr404($id);
+
+        dd($user);
+
+        $data = [
+            'title' => 'Info do usuário ' . esc($user->username),
+            'user'  => $user,
+        ];
+
+        return view("Users/show", $data);
+    }
+
+    private function getUserOr404(int $id = null)
+    {
+        $user = $this->userModel->withDeleted(true)->find($id);
+
+        if(!$id || !$user) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Não encontramos o usuário $id");
+        }
+
+        return $user;
+    }
 }
-
-
-https://github.com/codeigniter4/translations

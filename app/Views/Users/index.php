@@ -11,7 +11,7 @@
 <?= $this->section("content") ?>
 
 <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="block">
             <div class="table-responsive">
                 <table class="table table-striped table-sm" id="ajaxTable" style="width: 100%;">
