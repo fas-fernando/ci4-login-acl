@@ -16,7 +16,7 @@
 <?= $this->section("content") ?>
 
 <div class="row">
-    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+    <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
         <div class="block">
             <div class="text-center">
                 <?php if ($user->avatar == null) : ?>
@@ -32,8 +32,8 @@
 
             <h5 class="card-title"><?= esc($user->username) ?></h5>
             <p class="card-text"><strong>E-mail:</strong> <?= esc($user->email) ?></p>
-            <p class="card-text"><strong>Criado:</strong> <?= $user->created_at ?></p>
-            <p class="card-text"><strong>Atualizado:</strong> <?= $user->updated_at ?></p>
+            <p class="card-text"><strong>Criado:</strong> <?= $user->created_at->humanize() ?></p>
+            <p class="card-text"><strong>Atualizado:</strong> <?= $user->updated_at->humanize() ?></p>
 
             <hr class="border-secondary">
             <div class="btn-group">
