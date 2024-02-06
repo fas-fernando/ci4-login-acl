@@ -18,6 +18,9 @@
 <div class="row">
     <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
         <div class="block">
+
+            
+
             <div class="text-center">
                 <?php if ($user->avatar == null) : ?>
                     <img src="<?= site_url('resources/img/user_default.png') ?>" class="card-img-top" style="width:90%" alt="user_default">
@@ -32,6 +35,7 @@
 
             <h5 class="card-title"><?= esc($user->username) ?></h5>
             <p class="card-text"><strong>E-mail:</strong> <?= esc($user->email) ?></p>
+            <p class="card-text"><strong></strong><?= ($user->status == true) ? '<i class="text-success fa fa-unlock"></i> <span class="text-success">Ativo</span>' : '<i class="text-danger fa fa-lock"></i> <span class="text-danger">Inativo</span>' ?></p>
             <p class="card-text"><strong>Criado:</strong> <?= $user->created_at->humanize() ?></p>
             <p class="card-text"><strong>Atualizado:</strong> <?= $user->updated_at->humanize() ?></p>
 

@@ -26,8 +26,7 @@ class Users extends BaseController
 
     public function getUsers()
     {
-        if(!$this->request->isAJAX())
-            return redirect()->back();
+        if(!$this->request->isAJAX()) return redirect()->back();
 
         $attr = [
             'id',
@@ -81,6 +80,40 @@ class Users extends BaseController
         ];
 
         return view("Users/edit", $data);
+    }
+
+    public function update()
+    {
+        if(!$this->request->isAJAX()) return redirect()->back();
+
+        $returnData['token'] = csrf_hash();
+
+        $post = $this->request->getPost();
+
+        $user = $this->getUserOr404($post['id']);
+
+        if(empty($post['password'])) {
+            unset($post['password']);
+            unset($post['password_confirmation']);
+        }
+
+        $user->fill($post);
+
+        if($user->hasChanged() == false) {
+            $returnData['info'] = 'Não há dados para serem atualizados';
+            return $this->response->setJSON($returnData);
+        }
+
+        if($this->userModel->protect(false)->save($user)) {
+            session()->setFlashdata('success', 'Dados salvos com sucesso');
+            
+            return $this->response->setJSON($returnData);
+        }
+
+        $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+        $returnData['errors_model'] = $this->userModel->errors();
+
+        return $this->response->setJSON($returnData);
     }
 
     private function getUserOr404(int $id = null)
