@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Entities\User;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
 
@@ -56,6 +57,18 @@ class Users extends BaseController
         ];
 
         return $this->response->setJSON($returnData);
+    }
+
+    public function create()
+    {
+        $user = new User();
+
+        $data = [
+            'title' => 'Criação do usuário',
+            'user'  => $user,
+        ];
+
+        return view("Users/create", $data);
     }
 
     public function show(int $id = null)

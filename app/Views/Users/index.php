@@ -13,6 +13,8 @@
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="block">
+            <a href="<?= site_url('users/create') ?>" class="btn btn-primary mb-5">Novo usuário</a>
+
             <div class="table-responsive">
                 <table class="table table-striped table-sm" id="ajaxTable" style="width: 100%;">
                     <thead>
