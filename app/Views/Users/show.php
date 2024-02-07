@@ -18,17 +18,16 @@
 <div class="row">
     <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
         <div class="block">
-
-            
-
             <div class="text-center">
                 <?php if ($user->avatar == null) : ?>
-                    <img src="<?= site_url('resources/img/user_default.png') ?>" class="card-img-top" style="width:90%" alt="user_default">
+                    <img src="<?= site_url('resources/img/user_default.png') ?>" class="card-img-top" style="width:300px; height:300px" alt="user_default">
                 <?php else : ?>
-                    <img src="<?= site_url("users/image/$user->avatar") ?>" class="card-img-top" style="width:90%" alt="<?= esc($user->avatar) ?>">
+                    <img src="<?= site_url("users/image/$user->avatar") ?>" class="card-img-top" style="width:300px; height:300px" alt="<?= esc($user->avatar) ?>">
                 <?php endif ?>
 
-                <a href="<?= site_url("users/editimage/$user->id") ?>" class="btn btn-outline-primary btn-sm mt-3">Alterar Avatar</a>
+                <div>
+                    <a href="<?= site_url("users/editimage/$user->id") ?>" class="btn btn-outline-primary btn-sm mt-3">Alterar Avatar</a>
+                </div>
             </div>
 
             <hr class="border-secondary">

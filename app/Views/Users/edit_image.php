@@ -50,7 +50,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '<?= site_url('users/update') ?>',
+                url: '<?= site_url('users/upload') ?>',
                 data: new FormData(this),
                 dataType: 'json',
                 contentType: false,
@@ -66,11 +66,7 @@
                     $("[name=csrf_order]").val(response.token);
 
                     if (!response.error) {
-                        if (response.info) {
-                            $("#response").html('<div class="alert alert-info">' + response.info + '</div>');
-                        } else {
-                            window.location.href = "<?= site_url("users/show/$user->id") ?>";
-                        }
+                        window.location.href = "<?= site_url("users/show/$user->id") ?>";
                     } else {
                         $("#response").html('<div class="alert alert-danger">' + response.error + '</div>');
 
