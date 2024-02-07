@@ -37,7 +37,7 @@ class Users extends BaseController
             'avatar',
         ];
 
-        $users = $this->userModel->select($attr)->orderBy('id', 'DESC')->findAll();
+        $users = $this->userModel->select($attr)->withDeleted()->orderBy('id', 'DESC')->findAll();
 
         $data = [];
 
@@ -169,6 +169,31 @@ class Users extends BaseController
         $returnData['errors_model'] = $this->userModel->errors();
 
         return $this->response->setJSON($returnData);
+    }
+
+    public function delete(int $id = null)
+    {
+        $user = $this->getUserOr404($id);
+
+        if($this->request->getMethod() === 'post') {
+            $this->userModel->delete($user->id);
+
+            if($user->avatar != null) $this->removeImageForFileSystem($user->avatar);
+
+            $user->avatar = null;
+            $user->status = false;
+
+            $this->userModel->protect(false)->save($user);
+
+            return redirect()->to(site_url('users'))->with('success', "Usuário $user->username deletado com sucesso");
+        }
+
+        $data = [
+            'title' => 'Exclusão do usuário ' . esc($user->username),
+            'user'  => $user,
+        ];
+
+        return view("Users/delete", $data);
     }
 
     public function editImage(int $id = null)
