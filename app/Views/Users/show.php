@@ -13,11 +13,10 @@
 <?= $this->endSection() ?>
 
 <!-- Conteúdo que está sendo enviado para o Layout Main -->
-<!-- width:300px; height:300px -->
 <?= $this->section("content") ?>
 
 <div class="row">
-    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">
         <div class="block">
             <div class="text-center">
                 <?php if ($user->avatar == null) : ?>
