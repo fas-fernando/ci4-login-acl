@@ -42,10 +42,26 @@ class Users extends BaseController
         $data = [];
 
         foreach($users as $user) {
+            if($user->avatar != null) {
+                $avatar = [
+                    'src'   => site_url("users/avatar/$user->avatar"),
+                    'class' => 'rounded-circle img-fluid',
+                    'alt'   => esc($user->username),
+                    'width' => '50',
+                ];
+            } else {
+                $avatar = [
+                    'src'   => site_url("resources/img/user_default.png"),
+                    'class' => 'rounded-circle img-fluid',
+                    'alt'   => 'user_default',
+                    'width' => '50',
+                ];
+            }
+
             $username = esc($user->username);
 
             $data[] = [
-                'avatar'   => $user->avatar,
+                'avatar'   => $user->avatar = img($avatar),
                 'username' => anchor("users/show/$user->id", $username, 'title="Exibir usuário ' . $username . '"'),
                 'email'    => esc($user->email),
                 'status'   => ($user->status == true ? '<i class="text-success fa fa-unlock"></i> <span class="text-success">Ativo</span>' : '<i class="text-danger fa fa-lock"></i> <span class="text-danger">Inativo</span>' ),

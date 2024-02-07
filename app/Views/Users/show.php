@@ -16,13 +16,13 @@
 <?= $this->section("content") ?>
 
 <div class="row">
-    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4">
+    <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4">
         <div class="block">
             <div class="text-center">
                 <?php if ($user->avatar == null) : ?>
-                    <img src="<?= site_url('resources/img/user_default.png') ?>" class="card-img-top" style="width:50%" alt="user_default">
+                    <img src="<?= site_url('resources/img/user_default.png') ?>" class="card-img-top" style="width:90%" alt="user_default">
                 <?php else : ?>
-                    <img src="<?= site_url("users/avatar/$user->avatar") ?>" class="card-img-top" style="width:50%" alt="<?= esc($user->avatar) ?>">
+                    <img src="<?= site_url("users/avatar/$user->avatar") ?>" class="card-img-top" style="width:90%" alt="<?= esc($user->avatar) ?>">
                 <?php endif ?>
 
                 <div>
