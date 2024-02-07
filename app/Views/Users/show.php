@@ -22,7 +22,7 @@
                 <?php if ($user->avatar == null) : ?>
                     <img src="<?= site_url('resources/img/user_default.png') ?>" class="card-img-top" style="width:300px; height:300px" alt="user_default">
                 <?php else : ?>
-                    <img src="<?= site_url("users/image/$user->avatar") ?>" class="card-img-top" style="width:300px; height:300px" alt="<?= esc($user->avatar) ?>">
+                    <img src="<?= site_url("users/avatar/$user->avatar") ?>" class="card-img-top" style="width:300px; height:300px" alt="<?= esc($user->avatar) ?>">
                 <?php endif ?>
 
                 <div>

@@ -250,6 +250,11 @@ class Users extends BaseController
         }
     }
 
+    public function avatar(string $avatar = null)
+    {
+        if($avatar != null) $this->showFile('users', $avatar);
+    }
+
     private function manipulateImage(string $pathImage, int $user_id)
     {
         service('image')
