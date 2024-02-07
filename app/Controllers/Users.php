@@ -155,6 +155,18 @@ class Users extends BaseController
         return $this->response->setJSON($returnData);
     }
 
+    public function editImage(int $id = null)
+    {
+        $user = $this->getUserOr404($id);
+
+        $data = [
+            'title' => 'Alterar imagem do usuário ' . esc($user->username),
+            'user'  => $user,
+        ];
+
+        return view("Users/edit_image", $data);
+    }
+
     private function getUserOr404(int $id = null)
     {
         $user = $this->userModel->withDeleted(true)->find($id);
