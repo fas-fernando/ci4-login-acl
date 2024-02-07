@@ -37,7 +37,7 @@ class Users extends BaseController
             'avatar',
         ];
 
-        $users = $this->userModel->select($attr)->findAll();
+        $users = $this->userModel->select($attr)->orderBy('id', 'DESC')->findAll();
 
         $data = [];
 
@@ -69,6 +69,32 @@ class Users extends BaseController
         ];
 
         return view("Users/create", $data);
+    }
+
+    public function store()
+    {
+        if(!$this->request->isAJAX()) return redirect()->back();
+
+        $returnData['token'] = csrf_hash();
+
+        $post = $this->request->getPost();
+
+        $user = new User($post);
+
+        if($this->userModel->protect(false)->insert($user)) {
+            $btnNewUser = anchor("users/create", "Novo usuário", ['class' => 'btn btn-warning btn-sm mt-3']);
+
+            session()->setFlashdata('success', "Dados salvos com sucesso <br> $btnNewUser");
+
+            $returnData['id'] = $this->userModel->getInsertID();
+            
+            return $this->response->setJSON($returnData);
+        }
+
+        $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+        $returnData['errors_model'] = $this->userModel->errors();
+
+        return $this->response->setJSON($returnData);
     }
 
     public function show(int $id = null)

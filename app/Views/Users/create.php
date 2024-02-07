@@ -28,13 +28,15 @@
                     
                     <div class="form-group mt-5 mb-4">
                         <input type="submit" id="btn-save" value="Salvar" class="btn btn-primary">
-                        <a href="<?= site_url("users/show/$user->id") ?>" class="btn btn-secondary ml-3">Voltar</a>
+                        <a href="<?= site_url("users") ?>" class="btn btn-secondary ml-3">Voltar</a>
                     </div>
                 <?= form_close() ?>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <?= $this->endSection() ?>
 
@@ -48,7 +50,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '<?= site_url('users/update') ?>',
+                url: '<?= site_url('users/store') ?>',
                 data: new FormData(this),
                 dataType: 'json',
                 contentType: false,
@@ -67,7 +69,7 @@
                         if(response.info) {
                             $("#response").html('<div class="alert alert-info">' + response.info + '</div>');
                         } else {
-                            window.location.href = "<?= site_url("users/show/$user->id") ?>";
+                            window.location.href = "<?= site_url("users/show/") ?>" + response.id;
                         }
                     } else {
                         $("#response").html('<div class="alert alert-danger">' + response.error + '</div>');
