@@ -13,16 +13,17 @@
 <?= $this->endSection() ?>
 
 <!-- Conteúdo que está sendo enviado para o Layout Main -->
+<!-- width:300px; height:300px -->
 <?= $this->section("content") ?>
 
 <div class="row">
-    <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-3">
         <div class="block">
             <div class="text-center">
                 <?php if ($user->avatar == null) : ?>
-                    <img src="<?= site_url('resources/img/user_default.png') ?>" class="card-img-top" style="width:300px; height:300px" alt="user_default">
+                    <img src="<?= site_url('resources/img/user_default.png') ?>" class="card-img-top" style="width:50%" alt="user_default">
                 <?php else : ?>
-                    <img src="<?= site_url("users/avatar/$user->avatar") ?>" class="card-img-top" style="width:300px; height:300px" alt="<?= esc($user->avatar) ?>">
+                    <img src="<?= site_url("users/avatar/$user->avatar") ?>" class="card-img-top" style="width:50%" alt="<?= esc($user->avatar) ?>">
                 <?php endif ?>
 
                 <div>
