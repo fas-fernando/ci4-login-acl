@@ -13,16 +13,15 @@
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
         <div class="block">
-            <a href="<?= site_url('users/create') ?>" class="btn btn-primary mb-5">Novo usuário</a>
+            <a href="<?= site_url('groups/create') ?>" class="btn btn-primary mb-5">Novo Grupo</a>
 
             <div class="table-responsive">
                 <table class="table table-striped table-sm" id="ajaxTable" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th>Avatar</th>
                             <th>Nome</th>
-                            <th>E-mail</th>
-                            <th>Status</th>
+                            <th>Descrição</th>
+                            <th>Situação</th>
                         </tr>
                     </thead>
                 </table>
@@ -72,18 +71,16 @@
 
         new DataTable('#ajaxTable', {
             "oLanguage": DATATABLE_PTBR,
-            ajax: "<?= site_url('users/getusers') ?>",
-            columns: [{
-                    data: 'avatar'
+            ajax: "<?= site_url('groups/getgroups') ?>",
+            columns: [
+                {
+                    data: 'name'
                 },
                 {
-                    data: 'username'
+                    data: 'description'
                 },
                 {
-                    data: 'email'
-                },
-                {
-                    data: 'status'
+                    data: 'show'
                 },
             ],
             "deferRender": true,
