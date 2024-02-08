@@ -113,9 +113,7 @@ class Groups extends BaseController
         $group = $this->getGroupOr404($id);
 
         if ($group->id < 3)
-            return redirect()
-                ->back()
-                ->with('attention', 'O grupo ' . esc($group->name) . ' não pode ser editado ou excluído');
+            return redirect()->back()->with('attention', 'O grupo <strong>' . esc($group->name) . '</strong> não pode ser editado ou excluído');
 
         $data = [
             'title' => 'Editar grupo ' . esc($group->name),
@@ -159,6 +157,41 @@ class Groups extends BaseController
         $returnData['errors_model'] = $this->groupModel->errors();
 
         return $this->response->setJSON($returnData);
+    }
+
+    public function delete(int $id = null)
+    {
+        $group = $this->getGroupOr404($id);
+
+        if ($group->id < 3)
+        return redirect()->back()->with('attention', 'O grupo <strong>' . esc($group->name) . '</strong> não pode ser editado ou excluído');
+
+        if($group->deleted_at != null) return redirect()->back()->with('info', "Esse grupo já encontra-se excluído");
+
+        if($this->request->getMethod() === 'post') {
+            $this->groupModel->delete($group->id);
+
+            return redirect()->to(site_url('groups'))->with('success', 'Grupo <strong>' . esc($group->name) . '</strong> deletado com sucesso');
+        }
+
+        $data = [
+            'title' => 'Exclusão do grupo ' . esc($group->name),
+            'group'  => $group,
+        ];
+
+        return view("Groups/delete", $data);
+    }
+
+    public function restore(int $id = null)
+    {
+        $group = $this->getGroupOr404($id);
+
+        if($group->deleted_at == null) return redirect()->back()->with('info', "Apenas grupos excluídos podem ser recuperados");
+
+        $group->deleted_at = null;
+        $this->groupModel->protect(false)->save($group);
+
+        return redirect()->back()->with('success', 'Grupo <strong>' . $group->name . '</strong> recuperado com sucesso');
     }
 
     private function getGroupOr404(int $id = null)
