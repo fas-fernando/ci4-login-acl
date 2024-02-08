@@ -26,7 +26,7 @@ class Groups extends BaseController
 
     public function getGroups()
     {
-        if(!$this->request->isAJAX()) return redirect()->back();
+        if (!$this->request->isAJAX()) return redirect()->back();
 
         $attr = [
             'id',
@@ -40,7 +40,7 @@ class Groups extends BaseController
 
         $data = [];
 
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
 
             $name = esc($group->name);
 
@@ -74,7 +74,7 @@ class Groups extends BaseController
     {
         $group = $this->getGroupOr404($id);
 
-        if($group->id < 3)
+        if ($group->id < 3)
             return redirect()
                 ->back()
                 ->with('attention', 'O grupo ' . esc($group->name) . ' não pode ser editado ou excluído');
@@ -87,11 +87,47 @@ class Groups extends BaseController
         return view("Groups/edit", $data);
     }
 
+    public function update()
+    {
+        if (!$this->request->isAJAX()) return redirect()->back();
+
+        $returnData['token'] = csrf_hash();
+
+        $post = $this->request->getPost();
+
+        $group = $this->getGroupOr404($post['id']);
+
+        if ($group->id < 3) {
+            $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+            $returnData['errors_model'] = ['group' => 'O grupo <strong class="text-white">' . esc($group->name) . '</strong> não pode ser editado ou excluído'];
+
+            return $this->response->setJSON($returnData);
+        }
+
+        $group->fill($post);
+
+        if ($group->hasChanged() == false) {
+            $returnData['info'] = 'Não há dados para serem atualizados';
+            return $this->response->setJSON($returnData);
+        }
+
+        if ($this->groupModel->save($group)) {
+            session()->setFlashdata('success', 'Dados salvos com sucesso');
+
+            return $this->response->setJSON($returnData);
+        }
+
+        $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+        $returnData['errors_model'] = $this->groupModel->errors();
+
+        return $this->response->setJSON($returnData);
+    }
+
     private function getGroupOr404(int $id = null)
     {
         $group = $this->groupModel->withDeleted(true)->find($id);
 
-        if(!$id || !$group) {
+        if (!$id || !$group) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Não encontramos o grupo $id");
         }
 
