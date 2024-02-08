@@ -35,6 +35,7 @@ class Users extends BaseController
             'email',
             'status',
             'avatar',
+            'deleted_at',
         ];
 
         $users = $this->userModel->select($attr)->withDeleted()->orderBy('id', 'DESC')->findAll();
@@ -64,7 +65,7 @@ class Users extends BaseController
                 'avatar'   => $user->avatar = img($avatar),
                 'username' => anchor("users/show/$user->id", $username, 'title="Exibir usuário ' . $username . '"'),
                 'email'    => esc($user->email),
-                'status'   => ($user->status == true ? '<i class="text-success fa fa-unlock"></i> <span class="text-success">Ativo</span>' : '<i class="text-danger fa fa-lock"></i> <span class="text-danger">Inativo</span>' ),
+                'status'   => $user->showSituation(),
             ];
         }
 
@@ -175,6 +176,8 @@ class Users extends BaseController
     {
         $user = $this->getUserOr404($id);
 
+        if($user->deleted_at != null) return redirect()->back()->with('info', "Esse usuário já encontra-se excluído");
+
         if($this->request->getMethod() === 'post') {
             $this->userModel->delete($user->id);
 
@@ -194,6 +197,18 @@ class Users extends BaseController
         ];
 
         return view("Users/delete", $data);
+    }
+
+    public function restore(int $id = null)
+    {
+        $user = $this->getUserOr404($id);
+
+        if($user->deleted_at == null) return redirect()->back()->with('info', "Apenas usuários excluídos podem ser recuperados");
+
+        $user->deleted_at = null;
+        $this->userModel->protect(false)->save($user);
+
+        return redirect()->back()->with('success', "Usuário $user->username recuperado com sucesso");
     }
 
     public function editImage(int $id = null)
