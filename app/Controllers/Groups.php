@@ -58,6 +58,44 @@ class Groups extends BaseController
         return $this->response->setJSON($returnData);
     }
 
+    public function create()
+    {
+        $group = new Group();
+
+        $data = [
+            'title' => 'Criação do grupo',
+            'group' => $group,
+        ];
+
+        return view("Groups/create", $data);
+    }
+
+    public function store()
+    {
+        if(!$this->request->isAJAX()) return redirect()->back();
+
+        $returnData['token'] = csrf_hash();
+
+        $post = $this->request->getPost();
+
+        $group = new Group($post);
+
+        if($this->groupModel->insert($group)) {
+            $btnNewGroup = anchor("groups/create", "Novo grupo", ['class' => 'btn btn-warning btn-sm mt-3']);
+
+            session()->setFlashdata('success', "Dados salvos com sucesso <br> $btnNewGroup");
+
+            $returnData['id'] = $this->groupModel->getInsertID();
+            
+            return $this->response->setJSON($returnData);
+        }
+
+        $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+        $returnData['errors_model'] = $this->groupModel->errors();
+
+        return $this->response->setJSON($returnData);
+    }
+
     public function show(int $id = null)
     {
         $group = $this->getGroupOr404($id);
