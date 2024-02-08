@@ -20,7 +20,12 @@
         <div class="user-block block">
             <h5 class="card-title"><?= esc($group->name) ?></h5>
             <p class="card-text"><strong>Descrição:</strong> <?= esc($group->description) ?></p>
-            <p class="contributions mt-0"><?= $group->showSituation() ?></p>
+            <p class="contributions mt-0">
+                <?= $group->showSituation() ?>
+                <?php if($group->deleted_at == null) : ?>
+                    <a tabindex="0" class="ml-3" role="button" data-toggle="popover" data-trigger="focus" title="Importante" data-content="Esse grupo <?= ($group->show == true ? 'será' : 'não será' ) ?> exibido como opção na hora de definir um <strong>Responsável técnico</strong> pela ordem de serviço."><i class="fa fa-question-circle fa-lg text-warning"></i></a>
+                <?php endif ?>
+            </p>
             <p class="card-text"><strong>Criado:</strong> <?= $group->created_at->humanize() ?></p>
             <p class="card-text"><strong>Atualizado:</strong> <?= $group->updated_at->humanize() ?></p>
 

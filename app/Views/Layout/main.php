@@ -50,6 +50,14 @@
     <script src="<?= site_url("resources/plugin/bootstrap/js/bootstrap.min.js") ?>"></script>
     <script src="<?= site_url("resources/js/front.js") ?>"></script>
 
+    <script>
+      $(function() {
+        $('[data-toggle="popover"]').popover({
+          html: true,
+        });
+      });
+    </script>
+
     <?= $this->renderSection("scripts") ?>
   </body>
 </html>
