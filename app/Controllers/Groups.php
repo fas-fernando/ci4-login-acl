@@ -70,6 +70,23 @@ class Groups extends BaseController
         return view("Groups/show", $data);
     }
 
+    public function edit(int $id = null)
+    {
+        $group = $this->getGroupOr404($id);
+
+        if($group->id < 3)
+            return redirect()
+                ->back()
+                ->with('attention', 'O grupo ' . esc($group->name) . ' não pode ser editado ou excluído');
+
+        $data = [
+            'title' => 'Editar grupo ' . esc($group->name),
+            'group' => $group,
+        ];
+
+        return view("Groups/edit", $data);
+    }
+
     private function getGroupOr404(int $id = null)
     {
         $group = $this->groupModel->withDeleted(true)->find($id);
