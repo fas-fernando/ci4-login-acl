@@ -76,7 +76,7 @@ class Groups extends BaseController
 
     public function store()
     {
-        if(!$this->request->isAJAX()) return redirect()->back();
+        if (!$this->request->isAJAX()) return redirect()->back();
 
         $returnData['token'] = csrf_hash();
 
@@ -84,13 +84,13 @@ class Groups extends BaseController
 
         $group = new Group($post);
 
-        if($this->groupModel->insert($group)) {
+        if ($this->groupModel->insert($group)) {
             $btnNewGroup = anchor("groups/create", "Novo grupo", ['class' => 'btn btn-warning btn-sm mt-3']);
 
             session()->setFlashdata('success', "Dados salvos com sucesso <br> $btnNewGroup");
 
             $returnData['id'] = $this->groupModel->getInsertID();
-            
+
             return $this->response->setJSON($returnData);
         }
 
@@ -170,9 +170,9 @@ class Groups extends BaseController
         if ($group->id < 3)
             return redirect()->back()->with('attention', 'O grupo <strong>' . esc($group->name) . '</strong> não pode ser editado ou excluído');
 
-        if($group->deleted_at != null) return redirect()->back()->with('info', "Esse grupo já encontra-se excluído");
+        if ($group->deleted_at != null) return redirect()->back()->with('info', "Esse grupo já encontra-se excluído");
 
-        if($this->request->getMethod() === 'post') {
+        if ($this->request->getMethod() === 'post') {
             $this->groupModel->delete($group->id);
 
             return redirect()->to(site_url('groups'))->with('success', 'Grupo <strong>' . esc($group->name) . '</strong> deletado com sucesso');
@@ -190,7 +190,7 @@ class Groups extends BaseController
     {
         $group = $this->getGroupOr404($id);
 
-        if($group->deleted_at == null) return redirect()->back()->with('info', "Apenas grupos excluídos podem ser recuperados");
+        if ($group->deleted_at == null) return redirect()->back()->with('info', "Apenas grupos excluídos podem ser recuperados");
 
         $group->deleted_at = null;
         $this->groupModel->protect(false)->save($group);
@@ -205,7 +205,7 @@ class Groups extends BaseController
         if ($group->id < 3)
             return redirect()->back()->with('info', 'Não é necessário atribuir ou remover permissões de acesso para o grupo de <strong>' . esc($group->name) . '</strong>');
 
-        if($group->id > 2) {
+        if ($group->id > 2) {
             $group->permissions = $this->groupPermissionModel->getPermissionsGroup($group->id, 10);
             $group->pager = $this->groupPermissionModel->pager;
         }
@@ -215,15 +215,59 @@ class Groups extends BaseController
             'group' => $group,
         ];
 
-        if(!empty($group->permissions)){
+        if (!empty($group->permissions)) {
             $permissionsExists = array_column($group->permissions, 'permission_id');
-            
+
             $data['availablePermissions'] = $this->permissionModel->whereNotIn('id', $permissionsExists)->findAll();
         } else {
             $data['availablePermissions'] = $this->permissionModel->findAll();
         }
 
         return view("Groups/permissions", $data);
+    }
+
+    public function storePermissions()
+    {
+        if (!$this->request->isAJAX()) return redirect()->back();
+
+        $returnData['token'] = csrf_hash();
+
+        $post = $this->request->getPost();
+
+        $group = $this->getGroupOr404($post['id']);
+
+        if (empty($post['permission_id'])) {
+            $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+            $returnData['errors_model'] = ['permission_id' => 'Escolha uma ou mais permissões para salvar'];
+
+            return $this->response->setJSON($returnData);
+        }
+
+        $permissionPush = [];
+
+        foreach($post['permission_id'] as $permission) {
+            array_push($permissionPush, [
+                'group_id'      => $group->id,
+                'permission_id' => $permission,
+            ]);
+        }
+
+        $this->groupPermissionModel->insertBatch($permissionPush);
+
+        session()->setFlashdata('success', 'Dados salvos com sucesso');
+
+        return $this->response->setJSON($returnData);
+    }
+
+    public function removePermission(int $main_id = null)
+    {
+        if ($this->request->getMethod() === 'post') {
+            $this->groupPermissionModel->delete($main_id);
+
+            return redirect()->back()->with('success', 'Permissão removida com sucesso');
+        }
+
+        return redirect()->back();
     }
 
     private function getGroupOr404(int $id = null)

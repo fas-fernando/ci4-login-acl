@@ -13,7 +13,7 @@ class GroupPermissionModel extends Model
     public function getPermissionsGroup(int $group_id, int $quantity_page)
     {
         $attr = [
-            'groups_permissions.id',
+            'groups_permissions.id AS main_id',
             'groups.id AS group_id',
             'permissions.id AS permission_id',
             'permissions.name'
