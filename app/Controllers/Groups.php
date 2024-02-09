@@ -208,9 +208,6 @@ class Groups extends BaseController
             $group->pager = $this->groupPermissionModel->pager;
         }
 
-        dd($group);
-
-
         $data = [
             'title' => 'Gerenciando as permissões do grupo ' . esc($group->name),
             'group' => $group,
