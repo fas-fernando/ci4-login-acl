@@ -10,11 +10,13 @@ class Groups extends BaseController
 {
     private $groupModel;
     private $groupPermissionModel;
+    private $permissionModel;
 
     public function __construct()
     {
         $this->groupModel = model('App\Models\GroupModel');
         $this->groupPermissionModel = model('App\Models\GroupPermissionModel');
+        $this->permissionModel = model('App\Models\PermissionModel');
     }
 
     public function index()
@@ -212,6 +214,14 @@ class Groups extends BaseController
             'title' => 'Gerenciando as permissões do grupo ' . esc($group->name),
             'group' => $group,
         ];
+
+        if(!empty($group->permissions)){
+            $permissionsExists = array_column($group->permissions, 'permission_id');
+            
+            $data['availablePermissions'] = $this->permissionModel->whereNotIn('id', $permissionsExists)->findAll();
+        } else {
+            $data['availablePermissions'] = $this->permissionModel->findAll();
+        }
 
         return view("Groups/permissions", $data);
     }
