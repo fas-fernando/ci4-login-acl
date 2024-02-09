@@ -204,7 +204,7 @@ class Groups extends BaseController
             return redirect()->back()->with('info', 'Não é necessário atribuir ou remover permissões de acesso para o grupo de <strong>' . esc($group->name) . '</strong>');
 
         if($group->id > 2) {
-            $group->permissions = $this->groupPermissionModel->getPermissionsGroup($group->id, 2);
+            $group->permissions = $this->groupPermissionModel->getPermissionsGroup($group->id, 10);
             $group->pager = $this->groupPermissionModel->pager;
         }
 

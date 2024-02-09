@@ -32,7 +32,7 @@
                         <thead>
                             <tr>
                                 <th>Permissão</th>
-                                <th>Ação</th>
+                                <th class="float-right">Ação</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,12 +40,18 @@
                                 <tr>
                                     <td><?= esc($permission->name) ?></td>
                                     <td>
-                                        <a href="#" class="btn btn-danger btn-sm">Excluir</a>
+                                        <a href="#" class="btn btn-danger btn-sm float-right">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach ?>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="mt-3">
+                    <?= $group->pager->links() ?>
                 </div>
             <?php endif ?>
         </div>
