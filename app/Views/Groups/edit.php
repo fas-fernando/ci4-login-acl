@@ -22,21 +22,19 @@
                 <!-- Exibirá os retornos do backend -->
                 <div id="response"></div>
 
-                <?= form_open('/', ['id' => 'form'], ['id' => "$user->id"]) ?>
+                <?= form_open('/', ['id' => 'form'], ['id' => "$group->id"]) ?>
 
-                    <?= $this->include("Users/_form") ?>
+                    <?= $this->include("Groups/_form") ?>
                     
                     <div class="form-group mt-5 mb-4">
                         <input type="submit" id="btn-save" value="Salvar" class="btn btn-primary">
-                        <a href="<?= site_url("users") ?>" class="btn btn-secondary ml-3">Voltar</a>
+                        <a href="<?= site_url("groups/show/$group->id") ?>" class="btn btn-secondary ml-3">Voltar</a>
                     </div>
                 <?= form_close() ?>
             </div>
         </div>
     </div>
 </div>
-
-
 
 <?= $this->endSection() ?>
 
@@ -50,7 +48,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '<?= site_url('users/store') ?>',
+                url: '<?= site_url('groups/update') ?>',
                 data: new FormData(this),
                 dataType: 'json',
                 contentType: false,
@@ -66,7 +64,11 @@
                     $("[name=csrf_order]").val(response.token);
 
                     if(!response.error) {
-                        window.location.href = "<?= site_url("users/show/") ?>" + response.id;
+                        if(response.info) {
+                            $("#response").html('<div class="alert alert-info">' + response.info + '</div>');
+                        } else {
+                            window.location.href = "<?= site_url("groups/show/$group->id") ?>";
+                        }
                     } else {
                         $("#response").html('<div class="alert alert-danger">' + response.error + '</div>');
 
