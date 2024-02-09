@@ -9,10 +9,12 @@ use CodeIgniter\HTTP\ResponseInterface;
 class Groups extends BaseController
 {
     private $groupModel;
+    private $groupPermissionModel;
 
     public function __construct()
     {
         $this->groupModel = model('App\Models\GroupModel');
+        $this->groupPermissionModel = model('App\Models\GroupPermissionModel');
     }
 
     public function index()
@@ -164,7 +166,7 @@ class Groups extends BaseController
         $group = $this->getGroupOr404($id);
 
         if ($group->id < 3)
-        return redirect()->back()->with('attention', 'O grupo <strong>' . esc($group->name) . '</strong> não pode ser editado ou excluído');
+            return redirect()->back()->with('attention', 'O grupo <strong>' . esc($group->name) . '</strong> não pode ser editado ou excluído');
 
         if($group->deleted_at != null) return redirect()->back()->with('info', "Esse grupo já encontra-se excluído");
 
@@ -192,6 +194,29 @@ class Groups extends BaseController
         $this->groupModel->protect(false)->save($group);
 
         return redirect()->back()->with('success', 'Grupo <strong>' . $group->name . '</strong> recuperado com sucesso');
+    }
+
+    public function permissions(int $id = null)
+    {
+        $group = $this->getGroupOr404($id);
+
+        if ($group->id < 3)
+            return redirect()->back()->with('info', 'Não é necessário atribuir ou remover permissões de acesso para o grupo de <strong>' . esc($group->name) . '</strong>');
+
+        if($group->id > 2) {
+            $group->permissions = $this->groupPermissionModel->getPermissionsGroup($group->id, 2);
+            $group->pager = $this->groupPermissionModel->pager;
+        }
+
+        dd($group);
+
+
+        $data = [
+            'title' => 'Gerenciando as permissões do grupo ' . esc($group->name),
+            'group' => $group,
+        ];
+
+        return view("Groups/permissions", $data);
     }
 
     private function getGroupOr404(int $id = null)

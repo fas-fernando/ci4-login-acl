@@ -48,6 +48,7 @@
                     </button>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="<?= site_url("groups/edit/$group->id") ?>">Editar</a>
+                        <a class="dropdown-item" href="<?= site_url("groups/permissions/$group->id") ?>">Gerenciar permissões</a>
                         <div class="dropdown-divider"></div>
                         <?php if ($group->deleted_at == null) : ?>
                             <a class="dropdown-item" href="<?= site_url("groups/delete/$group->id") ?>">Excluir</a>
