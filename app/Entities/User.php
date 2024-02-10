@@ -22,4 +22,9 @@ class User extends Entity
 
         if($this->status == false) return '<i class="text-danger fa fa-lock"></i> <span class="text-danger">Inativo</span>';
     }
+
+    public function checkPassword(string $password): bool
+    {
+        return password_verify($password, $this->password_hash);
+    }
 }

@@ -69,4 +69,9 @@ class UserModel extends Model
 
         return $data;
     }
+
+    public function getUserByEmail(string $email)
+    {
+        return $this->where('email', $email)->where('deleted_at', null)->first();
+    }
 }
