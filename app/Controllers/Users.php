@@ -10,10 +10,12 @@ use Exception;
 class Users extends BaseController
 {
     private $userModel;
+    private $groupUserModel;
 
     public function __construct()
     {
         $this->userModel = model('App\Models\UserModel');
+        $this->groupUserModel = model('App\Models\GroupUserModel');
     }
 
     public function index()
@@ -284,6 +286,21 @@ class Users extends BaseController
         session()->setFlashdata('success', 'Imagem atualizada com sucesso');
 
         return $this->response->setJSON($returnData);
+    }
+
+    public function groups(int $id = null)
+    {
+        $user = $this->getUserOr404($id);
+
+        $user->groups = $this->groupUserModel->getGroupsUsers($user->id, 10);
+        $user->pager = $this->groupUserModel->pager;
+
+        $data = [
+            'title' => 'Gerenciando os grupos de acesso do usuário ' . esc($user->username),
+            'user'  => $user,
+        ];
+
+        return view("Users/groups", $data);
     }
 
     private function getUserOr404(int $id = null)
