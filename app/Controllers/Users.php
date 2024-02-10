@@ -11,11 +11,13 @@ class Users extends BaseController
 {
     private $userModel;
     private $groupUserModel;
+    private $groupModel;
 
     public function __construct()
     {
         $this->userModel = model('App\Models\UserModel');
         $this->groupUserModel = model('App\Models\GroupUserModel');
+        $this->groupModel = model('App\Models\GroupModel');
     }
 
     public function index()
@@ -299,6 +301,19 @@ class Users extends BaseController
             'title' => 'Gerenciando os grupos de acesso do usuário ' . esc($user->username),
             'user'  => $user,
         ];
+
+        if(in_array(2, array_column($user->groups, 'group_id')))
+            return redirect()
+            ->to(site_url("users/show/$user->id"))
+            ->with('info', 'Esse usuário é um cliente. Portanto não pode pertencer a outro grupo');
+
+        if(!empty($user->groups)) {
+            $groupsExists = array_column($user->groups, 'group_id');
+
+            $data['availableGroups'] = $this->groupModel->where('id !=', 2)->whereNotIn('id', $groupsExists)->findAll();
+        } else {
+             $data['availableGroups'] = $this->groupModel->where('id !=', 2)->findAll();
+        }
 
         return view("Users/groups", $data);
     }
