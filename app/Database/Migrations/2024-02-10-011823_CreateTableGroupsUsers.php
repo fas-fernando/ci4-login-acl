@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateTableGroupsPermissions extends Migration
+class CreateTableGroupsUsers extends Migration
 {
     public function up()
     {
@@ -20,7 +20,7 @@ class CreateTableGroupsPermissions extends Migration
                 'constraint' => 5,
                 'unsigned' => true,
             ],
-            'permission_id' => [
+            'user_id' => [
                 'type' => 'INT',
                 'constraint' => 5,
                 'unsigned' => true,
@@ -29,17 +29,17 @@ class CreateTableGroupsPermissions extends Migration
 
         $this->forge->addKey('id', true);
         
-        $this->forge->addForeignKey('group_id', 'groups', 'id', 'CASCADE', 'CASCADE', 'fk_group_id_groups_p');
-        $this->forge->addForeignKey('permission_id', 'permissions', 'id', 'CASCADE', 'CASCADE', 'fk_permission_id_permissions');
+        $this->forge->addForeignKey('group_id', 'groups', 'id', 'CASCADE', 'CASCADE', 'fk_group_id_groups_u');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE', 'fk_user_id_users');
 
-        $this->forge->createTable('groups_permissions');
+        $this->forge->createTable('groups_users');
     }
 
     public function down()
     {
-        $this->forge->dropForeignKey('groups_permissions', 'fk_permission_id_permissions');
-        $this->forge->dropForeignKey('groups_permissions', 'fk_group_id_groups_p');
+        $this->forge->dropForeignKey('groups_users', 'fk_user_id_users');
+        $this->forge->dropForeignKey('groups_users', 'fk_group_id_groups_u');
 
-        $this->forge->dropTable('groups_permissions');
+        $this->forge->dropTable('groups_users');
     }
 }
