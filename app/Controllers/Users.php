@@ -307,6 +307,13 @@ class Users extends BaseController
             ->to(site_url("users/show/$user->id"))
             ->with('info', 'Esse usuário é um cliente. Portanto não pode pertencer a outro grupo');
 
+        if(in_array(1, array_column($user->groups, 'group_id'))) {
+            $user->full_control = true;
+            return view("Users/groups", $data);
+        }
+
+        $user->full_control = false;
+
         if(!empty($user->groups)) {
             $groupsExists = array_column($user->groups, 'group_id');
 
@@ -316,6 +323,73 @@ class Users extends BaseController
         }
 
         return view("Users/groups", $data);
+    }
+
+    public function storeGroups ()
+    {
+        if(!$this->request->isAJAX()) return redirect()->back();
+
+        $returnData['token'] = csrf_hash();
+
+        $post = $this->request->getPost();
+
+        $user = $this->getUserOr404($post['id']);
+
+        if (empty($post['group_id'])) {
+            $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+            $returnData['errors_model'] = ['group_id' => 'Escolha um ou mais grupos para salvar'];
+
+            return $this->response->setJSON($returnData);
+        }
+
+        if (in_array(2, $post['group_id'])) {
+            $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+            $returnData['errors_model'] = ['group_id' => 'O grupo de <strong class="text-white">Clientes</strong> não pode ser atribuído de forma manual'];
+
+            return $this->response->setJSON($returnData);
+        }
+
+        if (in_array(1, $post['group_id'])) {
+            $groupAdmin = [
+                'user_id'  => $user->id,
+                'group_id' => 1,
+            ];
+
+            $this->groupUserModel->insert($groupAdmin);
+
+            $this->groupUserModel->where('group_id !=', 1)->where('user_id', $user->id)->delete();
+
+            session()->setFlashdata('success', 'Dados salvos com sucesso');
+            session()->setFlashdata('info', 'Notamos que o Grupo Administrador foi informado, portanto, não há necessidade de informar outros grupos, pois apenas o Administrador será associado ao usuário');
+
+            return $this->response->setJSON($returnData);
+        }
+
+        $groupPush = [];
+
+        foreach($post['group_id'] as $group) {
+            array_push($groupPush, [
+                'user_id'  => $user->id,
+                'group_id' => $group,
+            ]);
+        }
+
+        $this->groupUserModel->insertBatch($groupPush);
+
+        session()->setFlashdata('success', 'Dados salvos com sucesso');
+
+        return $this->response->setJSON($returnData);
+    }
+
+    public function removeGroup(int $main_id = null)
+    {
+        if ($this->request->getMethod() === 'post') {
+            $this->groupUserModel->delete($main_id);
+
+            return redirect()->back()->with('success', 'Grupo removido com sucesso');
+        }
+
+        return redirect()->back();
     }
 
     private function getUserOr404(int $id = null)

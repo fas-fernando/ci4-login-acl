@@ -17,7 +17,6 @@ class GroupUserModel extends Model
             'groups.id AS group_id',
             'groups.name',
             'groups.description',
-            'users.id AS user_id',
         ];
 
         $query = $this->select($attr)
