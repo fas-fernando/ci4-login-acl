@@ -384,6 +384,11 @@ class Users extends BaseController
     public function removeGroup(int $main_id = null)
     {
         if ($this->request->getMethod() === 'post') {
+            $groupUser = $this->getGroupUserOr404($main_id);
+
+            if($groupUser->group_id == 2)
+                return redirect()->to(site_url("users/show/$groupUser->user_id"))->with('info', 'Não é permitida a exclusão do usuário do grupo Clientes');
+        
             $this->groupUserModel->delete($main_id);
 
             return redirect()->back()->with('success', 'Grupo removido com sucesso');
@@ -401,6 +406,17 @@ class Users extends BaseController
         }
 
         return $user;
+    }
+
+    private function getGroupUserOr404(int $main_id = null)
+    {
+        $groupUser = $this->groupUserModel->find($main_id);
+
+        if(!$main_id || !$groupUser) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Não encontramos o registro de associação ao grupo de acesso $main_id");
+        }
+
+        return $groupUser;
     }
 
     private function removeImageForFileSystem(string $avatar)
