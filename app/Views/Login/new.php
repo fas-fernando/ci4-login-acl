@@ -40,6 +40,8 @@
                             <div class="content">
                                 <?= form_open('/', ['id' => 'form', 'class' => 'form-validate']) ?>
                                     <div id="response"></div>
+
+                                    <?= $this->include('Layout/_messages') ?>
                                     
                                     <div class="form-group">
                                         <input id="email" type="email" name="email" required data-msg="Por favor, informe seu e-mail" class="input-material">
@@ -90,7 +92,7 @@
                         $("#btn-login").val('Carregando...');
                     },
                     success: function(response) {
-                        $("#btn-login").val('Salvar');
+                        $("#btn-login").val('Entrar');
                         $("#btn-login").removeAttr('disabled');
                         $("[name=csrf_order]").val(response.token);
 
@@ -108,7 +110,7 @@
                     },
                     error: function() {
                         alert('Não foi possível processar a solicitação. Por favor, entre em contato com o suporte técnico.');
-                        $("#btn-login").val('Salvar');
+                        $("#btn-login").val('Entrar');
                         $("#btn-login").removeAttr('disabled');
                     },
                 });

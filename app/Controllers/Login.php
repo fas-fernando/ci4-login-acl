@@ -46,4 +46,20 @@ class Login extends BaseController
         $returnData['redirect'] = 'home';
         return $this->response->setJSON($returnData);
     }
+
+    public function logout()
+    {
+        $auth = service('auth');
+
+        $userLogged = $auth->getUserLogged();
+
+        $auth->logout();
+
+        return redirect()->to(site_url("login/showmessagelogout/$userLogged->username"));
+    }
+
+    public function showMessageLogout(string $username = null)
+    {
+        return redirect()->to(site_url("login"))->with('success', "$username, esperamos ver você novamente!");
+    }
 }
