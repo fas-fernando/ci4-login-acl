@@ -397,6 +397,49 @@ class Users extends BaseController
         return redirect()->back();
     }
 
+    public function editPassword()
+    {
+        $data = [
+            'title' => 'Editar senha de acesso',
+        ];
+
+        return view("Users/edit_password", $data);
+    }
+
+    public function updatePassword()
+    {
+        if(!$this->request->isAJAX()) return redirect()->back();
+
+        $returnData['token'] = csrf_hash();
+
+        $current_password = $this->request->getPost('current_password');
+
+        $user = user_logged();
+
+        if($user->checkPassword($current_password) === false) {
+            $returnData['error']        = 'Por favor, verifique os erros abaixo e tente novamente';
+            $returnData['errors_model'] = ['current_password' => 'Senha atual invalida'];
+
+            return $this->response->setJSON($returnData);
+        }
+
+        $user->fill($this->request->getPost());
+
+        if($user->hasChanged() === false) return $returnData['info'] = 'Não há dados para atualizar';
+
+        if($this->userModel->save($user)) {
+            $returnData['success'] = 'Senha atualizada com sucesso';
+            // session()->setFlashdata('success', 'Dados salvos com sucesso');
+            
+            return $this->response->setJSON($returnData);
+        }
+
+        $returnData['error'] = 'Por favor, verifique os erros abaixo e tente novamente';
+        $returnData['errors_model'] = $this->userModel->errors();
+
+        return $this->response->setJSON($returnData);
+    }
+
     private function getUserOr404(int $id = null)
     {
         $user = $this->userModel->withDeleted(true)->find($id);
