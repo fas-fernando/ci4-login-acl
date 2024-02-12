@@ -14,15 +14,4 @@ class Home extends BaseController
 
         return view('Home/index', $data);
     }
-
-    public function login()
-    {
-        $auth = new Authentication();
-
-        // $auth->login('fernando@email.com', '123456');
-
-        dd($auth->getUserLogged());
-
-        // $auth->logout();
-    }
 }

@@ -27,4 +27,15 @@ class User extends Entity
     {
         return password_verify($password, $this->password_hash);
     }
+
+    public function havePermissionTo(string $permission): bool
+    {
+        if($this->is_admin === true) return true;
+
+        if(empty($this->permissions)) return false;
+
+        if(in_array($permission, $this->permissions) == false) return false;
+
+        return true;
+    }
 }
