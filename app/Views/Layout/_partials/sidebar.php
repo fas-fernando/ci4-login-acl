@@ -11,4 +11,5 @@
         <li class="<?= (url_is('/') ? 'active' : '' ) ?>"><a href="<?= site_url('/') ?>"> <i class="fa fa-home"></i>Home </a></li>
         <li class="<?= (url_is('users*') ? 'active' : '' ) ?>"><a href="<?= site_url('users') ?>"> <i class="fa fa-users"></i>Usuários </a></li>
         <li class="<?= (url_is('groups*') ? 'active' : '' ) ?>"><a href="<?= site_url('groups') ?>"> <i class="fa fa-id-card"></i>Grupos </a></li>
+        <li><a href="<?= site_url('users/editpassword') ?>"> <i class="fa fa-key"></i>Alterar senha </a></li>
 </nav>
