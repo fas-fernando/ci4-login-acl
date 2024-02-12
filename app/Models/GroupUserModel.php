@@ -28,4 +28,9 @@ class GroupUserModel extends Model
 
         return $query;
     }
+
+    public function userIsInGroup(int $group_id, int $user_id)
+    {
+        return $this->where('group_id', $group_id)->where('user_id', $user_id)->first();
+    }
 }
