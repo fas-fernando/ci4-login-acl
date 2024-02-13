@@ -50,4 +50,10 @@ class User extends Entity
 
         $this->reset_expires_in = date('Y-m-d H:i:s', time() + 7200);
     }
+
+    public function finishPasswordReset(): void
+    {
+        $this->reset_hash = null;
+        $this->reset_expires_in = null;
+    }
 }

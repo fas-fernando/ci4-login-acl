@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Libraries\Token;
 
 class UserModel extends Model
 {
@@ -92,5 +93,20 @@ class UserModel extends Model
             ->where('user_id', $user_id)
             ->groupBy('permissions.name')
             ->findAll();
+    }
+
+    public function getUserForResetPassword(string $token)
+    {
+        $token = new Token($token);
+
+        $tokenHash = $token->getHash();
+
+        $user = $this->where('reset_hash', $tokenHash)->where('deleted_at', null)->first();
+
+        if($user === null) return null;
+
+        if($user->reset_expires_in < date('Y-m-d H:i:s')) return null;
+
+        return $user;
     }
 }
