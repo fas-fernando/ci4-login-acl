@@ -24,6 +24,8 @@
     <div class="login-page">
         <div class="container d-flex align-items-center">
             <div class="form-holder has-shadow">
+                <?= $this->include('Layout/_messages') ?>
+                
                 <div class="row">
                     <!-- Logo & Information Panel-->
                     <div class="col-lg-6">

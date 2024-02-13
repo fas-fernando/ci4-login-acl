@@ -21,8 +21,6 @@
             <?= form_open('/', ['id' => 'form', 'class' => 'form-validate']) ?>
                 <div id="response"></div>
         
-                <?= $this->include('Layout/_messages') ?>
-        
                 <div class="form-group">
                     <input id="email" type="email" name="email" required data-msg="Por favor, informe seu e-mail" class="input-material">
                     <label for="email" class="label-material">E-mail</label>
