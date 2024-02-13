@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use CodeIgniter\Entity\Entity;
+use App\Libraries\Token;
 
 class User extends Entity
 {
@@ -37,5 +38,16 @@ class User extends Entity
         if(in_array($permission, $this->permissions) == false) return false;
 
         return true;
+    }
+
+    public function startPasswordReset(): void
+    {
+        $token = new Token();
+
+        $this->reset_token = $token->getValue();
+
+        $this->reset_hash = $token->getHash();
+
+        $this->reset_expires_in = date('Y-m-d H:i:s', time() + 7200);
     }
 }

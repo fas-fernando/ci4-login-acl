@@ -15,24 +15,35 @@
 <!-- Conteúdo que está sendo enviado para o Layout Main -->
 <?= $this->section("content") ?>
 
+<div class="col-lg-6">
+    <div class="info d-flex align-items-center">
+        <div class="content">
+            <div class="logo">
+                <h1><?= $title ?></h1>
+            </div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        </div>
+    </div>
+</div>
+
 <div class="col-lg-6 bg-white">
     <div class="form d-flex align-items-center">
         <div class="content">
             <?= form_open('/', ['id' => 'form', 'class' => 'form-validate']) ?>
-                <div id="response"></div>
-        
-                <div class="form-group">
-                    <input id="email" type="email" name="email" required data-msg="Por favor, informe seu e-mail" class="input-material">
-                    <label for="email" class="label-material">E-mail</label>
-                </div>
-                <div class="form-group">
-                    <input id="password" type="password" name="password" required data-msg="Por favor, informe sua senha" class="input-material">
-                    <label for="password" class="label-material">Senha</label>
-                </div>
-                <input type="submit" id="btn-login" class="btn btn-primary mb-3" value="Entrar">
+            <div id="response"></div>
+
+            <div class="form-group">
+                <input id="email" type="email" name="email" required data-msg="Por favor, informe seu e-mail" class="input-material">
+                <label for="email" class="label-material">E-mail</label>
+            </div>
+            <div class="form-group">
+                <input id="password" type="password" name="password" required data-msg="Por favor, informe sua senha" class="input-material">
+                <label for="password" class="label-material">Senha</label>
+            </div>
+            <input type="submit" id="btn-login" class="btn btn-primary mb-3" value="Entrar">
             <?= form_close() ?>
-        
-            <a href="#" class="forgot-pass">Esqueceu sua senha?</a>
+
+            <a href="<?= site_url('forgot') ?>" class="forgot-pass">Esqueceu sua senha?</a>
         </div>
     </div>
 </div>

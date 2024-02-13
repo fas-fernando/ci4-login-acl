@@ -27,19 +27,6 @@
                 <?= $this->include('Layout/_messages') ?>
                 
                 <div class="row">
-                    <!-- Logo & Information Panel-->
-                    <div class="col-lg-6">
-                        <div class="info d-flex align-items-center">
-                            <div class="content">
-                                <div class="logo">
-                                    <h1><?= $title ?></h1>
-                                </div>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Form Panel    -->
                     <?= $this->renderSection("content") ?>
                 </div>
             </div>
