@@ -290,6 +290,11 @@ class Users extends BaseController
         return $this->response->setJSON($returnData);
     }
 
+    public function avatar(string $avatar = null)
+    {
+        if($avatar != null) $this->showFile('users', $avatar);
+    }
+
     public function groups(int $id = null)
     {
         $user = $this->getUserOr404($id);
@@ -429,7 +434,6 @@ class Users extends BaseController
 
         if($this->userModel->save($user)) {
             $returnData['success'] = 'Senha atualizada com sucesso';
-            // session()->setFlashdata('success', 'Dados salvos com sucesso');
             
             return $this->response->setJSON($returnData);
         }
@@ -469,11 +473,6 @@ class Users extends BaseController
         if(is_file($pathImage)) {
             unlink($pathImage);
         }
-    }
-
-    public function avatar(string $avatar = null)
-    {
-        if($avatar != null) $this->showFile('users', $avatar);
     }
 
     private function manipulateImage(string $pathImage, int $user_id)

@@ -21,7 +21,6 @@
             <div class="logo">
                 <h1><?= $title ?></h1>
             </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
         </div>
     </div>
 </div>
@@ -29,21 +28,19 @@
 <div class="col-lg-6 bg-white">
     <div class="form d-flex align-items-center">
         <div class="content">
-            <?= form_open('/', ['id' => 'form', 'class' => 'form-validate']) ?>
+            <?= form_open('/', ['id' => 'form', 'class' => 'form-validate'], ['token' => $token]) ?>
             <div id="response"></div>
 
             <div class="form-group">
-                <input id="email" type="email" name="email" required data-msg="Por favor, informe seu e-mail" class="input-material">
-                <label for="email" class="label-material">E-mail</label>
+                <input id="password" type="password" name="password" required data-msg="Por favor, informe sua nova senha" class="input-material">
+                <label for="password" class="label-material">Nova senha</label>
             </div>
             <div class="form-group">
-                <input id="password" type="password" name="password" required data-msg="Por favor, informe sua senha" class="input-material">
-                <label for="password" class="label-material">Senha</label>
+                <input id="password_confirmation" type="password" name="password_confirmation" required data-msg="Por favor, confirme sua nova senha" class="input-material">
+                <label for="password_confirmation" class="label-material">Confirme nova senha</label>
             </div>
-            <input type="submit" id="btn-login" class="btn btn-primary mb-3" value="Entrar">
+            <input type="submit" id="btn-reset" class="btn btn-primary mb-3" value="Salvar nova senha">
             <?= form_close() ?>
-
-            <a href="<?= site_url('forgot') ?>" class="forgot-pass">Esqueceu sua senha?</a>
         </div>
     </div>
 </div>
@@ -60,7 +57,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '<?= site_url('login/store') ?>',
+                url: '<?= site_url('password/updatepassword') ?>',
                 data: new FormData(this),
                 dataType: 'json',
                 contentType: false,
@@ -68,15 +65,15 @@
                 processData: false,
                 beforeSend: function() {
                     $("#response").html('');
-                    $("#btn-login").val('Carregando...');
+                    $("#btn-reset").val('Carregando...');
                 },
                 success: function(response) {
-                    $("#btn-login").val('Entrar');
-                    $("#btn-login").removeAttr('disabled');
+                    $("#btn-reset").val('Salvar nova senha');
+                    $("#btn-reset").removeAttr('disabled');
                     $("[name=csrf_order]").val(response.token);
 
                     if (!response.error) {
-                        window.location.href = "<?= site_url() ?>" + response.redirect;
+                        window.location.href = "<?= site_url('login') ?>";
                     } else {
                         $("#response").html('<div class="alert alert-danger">' + response.error + '</div>');
 
@@ -89,8 +86,8 @@
                 },
                 error: function() {
                     alert('Não foi possível processar a solicitação. Por favor, entre em contato com o suporte técnico.');
-                    $("#btn-login").val('Entrar');
-                    $("#btn-login").removeAttr('disabled');
+                    $("#btn-reset").val('Salvar nova senha');
+                    $("#btn-reset").removeAttr('disabled');
                 },
             });
         });

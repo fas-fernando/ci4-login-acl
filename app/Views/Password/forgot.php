@@ -21,7 +21,7 @@
             <div class="logo">
                 <h1><?= $title ?></h1>
             </div>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            <p>Informe seu e-mail para receber uma chave de recuperação se senha!</p>
         </div>
     </div>
 </div>
@@ -34,16 +34,12 @@
 
             <div class="form-group">
                 <input id="email" type="email" name="email" required data-msg="Por favor, informe seu e-mail" class="input-material">
-                <label for="email" class="label-material">E-mail</label>
+                <label for="email" class="label-material">Informe seu e-mail</label>
             </div>
-            <div class="form-group">
-                <input id="password" type="password" name="password" required data-msg="Por favor, informe sua senha" class="input-material">
-                <label for="password" class="label-material">Senha</label>
-            </div>
-            <input type="submit" id="btn-login" class="btn btn-primary mb-3" value="Entrar">
+            <input type="submit" id="btn-forgot" class="btn btn-primary mb-3" value="Enviar">
             <?= form_close() ?>
 
-            <a href="<?= site_url('forgot') ?>" class="forgot-pass">Esqueceu sua senha?</a>
+            <a href="<?= site_url('login') ?>" class="forgot-pass">Voltar ao login</a>
         </div>
     </div>
 </div>
@@ -60,7 +56,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '<?= site_url('login/store') ?>',
+                url: '<?= site_url('password/reset') ?>',
                 data: new FormData(this),
                 dataType: 'json',
                 contentType: false,
@@ -68,15 +64,15 @@
                 processData: false,
                 beforeSend: function() {
                     $("#response").html('');
-                    $("#btn-login").val('Carregando...');
+                    $("#btn-forgot").val('Carregando...');
                 },
                 success: function(response) {
-                    $("#btn-login").val('Entrar');
-                    $("#btn-login").removeAttr('disabled');
+                    $("#btn-forgot").val('Enviar');
+                    $("#btn-forgot").removeAttr('disabled');
                     $("[name=csrf_order]").val(response.token);
 
                     if (!response.error) {
-                        window.location.href = "<?= site_url() ?>" + response.redirect;
+                        window.location.href = "<?= site_url('password/sendreset') ?>";
                     } else {
                         $("#response").html('<div class="alert alert-danger">' + response.error + '</div>');
 
@@ -89,8 +85,8 @@
                 },
                 error: function() {
                     alert('Não foi possível processar a solicitação. Por favor, entre em contato com o suporte técnico.');
-                    $("#btn-login").val('Entrar');
-                    $("#btn-login").removeAttr('disabled');
+                    $("#btn-forgot").val('Enviar');
+                    $("#btn-forgot").removeAttr('disabled');
                 },
             });
         });

@@ -36,8 +36,6 @@
     </div>
 </div>
 
-
-
 <?= $this->endSection() ?>
 
 <!-- Scripts que estão sendo enviado para o Layout Main -->
