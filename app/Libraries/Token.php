@@ -22,6 +22,6 @@ class Token
 
     public function getHash(): string
     {
-        return hash_hmac("sha256", $this->token, getenv('HASH_PASSWORD'));
+        return hash_hmac("sha256", $this->token, env('HASH_PASSWORD'));
     }
 }
