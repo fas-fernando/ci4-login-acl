@@ -1,67 +1,62 @@
-# CodeIgniter 4 Application Starter
+# Instruções para Executar a Aplicação Localmente
 
-## What is CodeIgniter?
+Este arquivo README.md contém as etapas necessárias para configurar e executar sua aplicação no ambiente local.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Requisitos
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+Certifique-se de que você tenha as seguintes ferramentas instaladas:
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+- **PHP 8.2**
+- **Composer 2.6**
+- **MySQL 8.2**
 
-The user guide corresponding to the latest version of the framework can be found
-[here](https://codeigniter4.github.io/userguide/).
+## Passos para Execução
 
-## Installation & updates
+1. **Configuração do Arquivo .env:**
+   - Faça uma cópia do arquivo `.env.example` para um arquivo `.env`.
+   - Descomente todo o código no arquivo `.env`.
+   - Defina a `url_base`.
+   - Escolha a opção `CI_ENVIRONMENT = development`.
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+2. **Instalação das Dependências:**
+   - Na pasta raiz do projeto, execute o seguinte comando para instalar as dependências do Composer:
+     ```
+     composer install
+     ```
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+3. **Criação do Banco de Dados:**
+   - Na raiz do projeto, crie um banco de dados com o seguinte comando:
+     ```
+     php spark db:create [nome_do_banco]
+     ```
 
-## Setup
+4. **Execução do Servidor:**
+   - Execute o servidor na raiz do projeto com o seguinte comando:
+     ```
+     php spark serve
+     ```
+   - Acesse a URL gerada pelo servidor.
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+5. **Criação das Tabelas:**
+   - Execute a URL base definida no arquivo `.env` com a seguinte rota:
+     ```
+     http://localhost:8080/migrate
+     ```
+   - Isso criará as tabelas necessárias para o projeto.
 
-## Important Change with index.php
+6. **População das Tabelas:**
+   - Execute a mesma URL base, mas agora com a rota:
+     ```
+     http://localhost:8080/seed
+     ```
+   - Isso irá popular as tabelas do banco de dados.
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+7. **Configuração do PHP:**
+   - Acesse o arquivo `php.ini` do servidor PHP local.
+   - Descomente as extensões `intl` e `mbstring` para garantir o funcionamento correto da aplicação.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## Observações
 
-**Please** read the user guide for a better explanation of how CI4 works!
+- Certifique-se de inserir as credenciais corretas do banco de dados nas opções do arquivo `.env`.
 
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 7.4 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> **Warning**
-> The end of life date for PHP 7.4 was November 28, 2022. If you are
-> still using PHP 7.4, you should upgrade immediately. The end of life date
-> for PHP 8.0 will be November 26, 2023.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+Agora você tem um guia completo para executar sua aplicação localmente! 🚀
